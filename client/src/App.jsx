@@ -3,6 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import MemoryMatch from './games/MemoryMatch'
+import NBack from './games/NBack'
 import Leaderboard from './pages/Leaderboard'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/games/memory-match" element={<MemoryMatch />} />
+          <Route path="/games/n-back" element={<NBack />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
