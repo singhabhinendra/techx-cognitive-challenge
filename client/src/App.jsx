@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import MemoryMatch from './games/MemoryMatch'
 import NBack from './games/NBack'
 import FastMath from './games/FastMath'
+import GridPath from './games/GridPath'
 import Leaderboard from './pages/Leaderboard'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/games/memory-match" element={<MemoryMatch />} />
           <Route path="/games/n-back" element={<NBack />} />
           <Route path="/games/fast-math" element={<FastMath />} />
+          <Route path="/games/grid-path" element={<GridPath />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
