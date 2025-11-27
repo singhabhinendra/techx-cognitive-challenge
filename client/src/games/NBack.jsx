@@ -3,6 +3,7 @@ import Timer from '../components/Timer'
 import ScoreBox from '../components/ScoreBox'
 import api from '../utils/api'
 import { useStore } from '../store/useStore'
+import GameOverModal from '../components/GameOverModal'
 
 function randomDigit() {
   return Math.floor(Math.random() * 9) + 1
@@ -64,6 +65,8 @@ export default function NBack() {
     clearInterval(tickRef.current)
   }
 
+  const [gameOverOpen, setGameOverOpen] = useState(false)
+
   function endGame() {
     setRunning(false)
     clearInterval(tickRef.current)
@@ -73,13 +76,20 @@ export default function NBack() {
     if (accuracy > 0.8) setN((x) => Math.min(4, x + 1))
     else if (accuracy < 0.45) setN((x) => Math.max(1, x - 1))
     setBest((b) => Math.max(b, score))
+    setGameOverOpen(true)
 
-    // send score to backend (best-effort)
+    // send score to backend (best-effort) with local retry queue on failure
     (async () => {
       try {
         await api.post('/games/record-score', { game: 'n-back', score, metadata: { n, hits, misses, falseAlarms } })
       } catch (err) {
-        // ignore errors (user might be unauthenticated)
+        try {
+          const pending = JSON.parse(localStorage.getItem('tx_pending_scores') || '[]')
+          pending.push({ game: 'n-back', score, metadata: { n, hits, misses, falseAlarms }, date: new Date().toISOString() })
+          localStorage.setItem('tx_pending_scores', JSON.stringify(pending))
+        } catch (e) {
+          // ignore
+        }
       }
     })()
   }
@@ -132,6 +142,17 @@ export default function NBack() {
 
   const currentValue = sequence[index] ?? null
 
+  function handleTryAgain() {
+    setGameOverOpen(false)
+    // re-generate sequence and start
+    const len = 40
+    const seq = Array.from({ length: len }).map(() => randomDigit())
+    setSequence(seq)
+    setIndex(0)
+    resetStats()
+    setRunning(true)
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
@@ -166,6 +187,7 @@ export default function NBack() {
         <div className="glass-card p-4">Misses: {misses}</div>
         <div className="glass-card p-4">False Alarms: {falseAlarms}</div>
       </div>
+      <GameOverModal open={gameOverOpen} onClose={() => setGameOverOpen(false)} onTryAgain={handleTryAgain} stats={{ score, hits, misses, falseAlarms }} />
     </div>
   )
 }

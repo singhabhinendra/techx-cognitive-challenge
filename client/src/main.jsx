@@ -11,3 +11,7 @@ createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </React.StrictMode>
 )
+
+// flush any queued score submissions (best-effort)
+import { flushPendingScores } from './utils/api'
+flushPendingScores().catch(() => {})
