@@ -12,6 +12,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Profile from './pages/Profile'
 import About from './pages/About'
+import AudioToggle from './components/AudioToggle'
 
 function Navbar() {
   return (
@@ -19,7 +20,7 @@ function Navbar() {
       <Link to="/" className="text-xl font-semibold neon-text">
         TechX Cognitive
       </Link>
-      <div className="space-x-4">
+      <div className="flex items-center space-x-4">
         <Link to="/dashboard" className="text-sm text-gray-300 hover:underline">
           Dashboard
         </Link>
@@ -29,6 +30,10 @@ function Navbar() {
         <Link to="/about" className="text-sm text-gray-300 hover:underline">
           About
         </Link>
+        <div>
+          {/* Audio toggle */}
+          <AudioToggle />
+        </div>
       </div>
     </nav>
   )

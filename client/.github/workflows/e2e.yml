@@ -1,0 +1,35 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install client deps
+        run: |
+          cd client
+          npm ci
+          npm run build
+      - name: Install Playwright browsers
+        run: |
+          cd client
+          npx playwright install --with-deps
+      - name: Start client preview
+        run: |
+          cd client
+          nohup npm run preview -- --port 5173 &
+          npx wait-on http://localhost:5173
+      - name: Run Playwright tests
+        run: |
+          cd client
+          npm run test:e2e
