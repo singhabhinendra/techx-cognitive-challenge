@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "test": "jest --runInBand",
-    "build": "echo \"no build for server\""
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
