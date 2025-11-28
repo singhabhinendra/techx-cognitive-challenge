@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: techx-cognitive-client
+    env: node
+    plan: free
+    branch: main
+    buildCommand: "cd client && npm ci && npm run build"
+    startCommand: "cd client && npm run preview"
+
+  - type: web
+    name: techx-cognitive-server
+    env: node
+    plan: free
+    branch: main
+    buildCommand: "cd server && npm ci"
+    startCommand: "cd server && node src/index.js"
+    envVariables:
+      - key: MONGO_URI
+        fromDatabase: false
+      - key: JWT_SECRET
+        fromDatabase: false
